@@ -1,0 +1,32 @@
+<div [formGroup]="exerciseForm" class="flex-container">
+  <h2 mat-dialog-title>Übung hinzufügen</h2>
+
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="name">
+    @if (exerciseForm.get('name')?.invalid && exerciseForm.get('name')?.touched) {
+      <mat-error>Name erforderlich (min. 3 Zeichen)</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Maschinennummer</mat-label>
+    <input matInput type="number" formControlName="machineNumber">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Notizen</mat-label>
+    <textarea matInput formControlName="notes"></textarea>
+  </mat-form-field>
+
+  @if (exerciseExists) {
+    <mat-error>Diese Übung existiert bereits!</mat-error>
+  }
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)='onCancel()'>Abbrechen</button>
+    <button mat-raised-button color="primary" (click)="onSave()" [disabled]="exerciseForm.invalid">
+      Speichern
+    </button>
+  </mat-dialog-actions>
+</div>

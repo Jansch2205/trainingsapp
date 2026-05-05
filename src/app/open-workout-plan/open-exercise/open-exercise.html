@@ -1,0 +1,26 @@
+<div class="content">
+  <h1 class="headline">{{exercise.machineNumber === 0 ? "" : exercise.machineNumber}} {{exercise.name}}</h1>
+  <div class="button-row">
+    <button mat-flat-button class="button blue" routerLink="/workout/{{workout.id}}">Zurück</button>
+  </div>
+  <h3>Gewicht:</h3>
+  <p>{{workoutExercise.weight}}kg</p>
+  <h3>Wiederholungen:</h3>
+  <p>{{workoutExercise.reps}}</p>
+  <h3>Sätze:</h3>
+  <p>{{workoutExercise.finishedSets}}/{{workoutExercise.sets}}</p>
+  <button mat-flat-button class="button blue" (click)="finishSet()" [disabled]="workoutExercise.sets <= workoutExercise.finishedSets">Satz beenden</button>
+  @if(exercise.notes !== "") {
+    <h3>Notizen</h3>
+    <p>{{exercise.notes}}</p>
+  }
+  @if(workoutExercise.lastWeightChange) {
+    <p>Letztes Gewichts Update</p>
+    <p class="lastWeightChange">{{workoutExercise.lastWeightChange}}</p>
+  }
+  <div>
+    <button matFab class="button" (click)="editExercise()">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </div>
+</div>

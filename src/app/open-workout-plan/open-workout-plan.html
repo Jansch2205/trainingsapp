@@ -1,0 +1,23 @@
+<div class="content">
+  <h1 class="headline">{{workout.name}}</h1>
+  @if (workout.lastFinished) {
+    <p>Zuletzt beendet: {{workout.lastFinished}}</p>
+  }
+  <div class="button-row">
+    <button mat-flat-button class="button blue" routerLink="/">Zurück</button>
+  </div>
+  @for (ex of workout.workoutExercises; track ex.id) {
+    <div class="exercise" routerLink="/exercise/{{workout.id}}/{{ex.id}}">
+      <h3>{{ $index + 1 }}. {{ getName(ex.id) }}</h3>
+      @if(ex.finishedSets === ex.sets) {
+        <p class="finished">Abgeschlossen</p>
+      } @else if (ex.finishedSets < ex.sets && ex.finishedSets > 0) {
+        <p class="finished">Gestartet</p>
+      } @else {
+        <p class="finished">Nicht gestartet</p>
+      }
+      <br>
+    </div>
+  }
+  <button mat-flat-button class="button blue" routerLink="/" (click)="resetWorkout()">Training abschließen</button>
+</div>

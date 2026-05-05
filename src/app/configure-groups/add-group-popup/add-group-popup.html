@@ -1,0 +1,36 @@
+<div class="flex-container">
+  <h2 mat-dialog-title>Gruppe hinzufügen</h2>
+
+  <form class="flex-container" #groupForm="ngForm">
+
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput
+             [(ngModel)]="name"
+             name="workoutName"
+             required
+             minlength="3"
+             #nameCtrl="ngModel">
+      @if (nameCtrl.invalid && nameCtrl.touched) {
+        <mat-error>Der Name muss mindestens 3 Zeichen lang sein!</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Workouts auswählen</mat-label>
+      <mat-select [ngModel]="selectedWorkouts"
+                  multiple>
+        @for (w of workouts; track w.id) {
+          <mat-option [value]="w">{{w.name}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)='onCancel()'>Abbrechen</button>
+    <button mat-raised-button color="primary" (click)="onSave()" [disabled]="groupForm.invalid">
+      Speichern
+    </button>
+  </mat-dialog-actions>
+  </form>
+</div>

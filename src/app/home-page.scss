@@ -1,0 +1,39 @@
+.button {
+  margin: 10px;
+}
+
+.button-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.headline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 75px 20px 20px;
+}
+
+.entries {
+  padding-bottom: 30px;
+}
+
+.blue {
+  background-color: #00448e !important;
+  color: lightgrey !important;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40px;
+}
+
+.name {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  cursor: pointer;
+}

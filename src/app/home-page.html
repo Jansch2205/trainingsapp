@@ -1,0 +1,30 @@
+<div class="content">
+  <h1 class="headline">Traingsapp</h1>
+  <div class="button-row">
+    <button mat-flat-button class="button blue" routerLink="/workoutHinzufuegen">Trainingsplan Hinzufügen</button>
+    <button mat-flat-button class="button blue" routerLink="/gruppenVerwalten">Gruppen verwalten</button>
+    <button mat-flat-button class="button blue" routerLink="/exercisesVerwalten">Übungen verwalten</button>
+  </div>
+  <br>
+</div>
+
+<div class="entries">
+  @for(entry of workoutPlans; track entry) {
+    <div class="flex-container">
+      <h3 class="name" routerLink="/workout/{{entry.id}}">{{ entry.name }}</h3>
+      @if(entry.started) {
+        <p class="finished">Gestartet</p>
+      } @else {
+        <p class="finished">Nicht gestartet</p>
+      }
+      <div>
+        <button matFab routerLink="/workoutHinzufuegen/{{entry.id}}" class="button">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button matFab (click)="deleteOne(entry.id)" class="button">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  }
+</div>

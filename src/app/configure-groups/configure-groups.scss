@@ -1,0 +1,31 @@
+.content {
+  text-align: center;
+}
+
+.headline {
+  display: flex;
+  margin: 75px 20px 20px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.blue {
+  background-color: #00448e !important;
+  color: lightgrey !important;
+
+  &:disabled, &[disabled] {
+    background-color: grey !important;
+    color: rgba(0, 0, 0, 0.5) !important;
+    cursor: not-allowed;
+  }
+}
+
+.button-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.button {
+  margin: 10px;
+}

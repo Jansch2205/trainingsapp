@@ -1,0 +1,63 @@
+<div class="content">
+  <h1 class="headline">Trainingsplan hinzufügen</h1>
+  <div class="button-row">
+    <button mat-flat-button class="button blue" routerLink="/">Zurück</button>
+  </div>
+  <br>
+</div>
+
+<form class="flex-container" #workoutForm="ngForm">
+
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput
+           [(ngModel)]="name"
+           name="workoutName"
+           required
+           minlength="3"
+           #nameCtrl="ngModel">
+    @if (nameCtrl.invalid && nameCtrl.touched) {
+      <mat-error>Der Name muss mindestens 3 Zeichen lang sein!</mat-error>
+    }
+  </mat-form-field>
+
+  <h2>Ausgewählte Übungen</h2>
+  <div class="selected-exercises">
+    @for (ex of exercise; track ex.id) {
+      <h3 (click)="configureExercise(ex)">{{ $index + 1 }}. {{ ex.name }}</h3>
+    } @empty {
+      <p>Noch keine Übungen ausgewählt.</p>
+    }
+  </div>
+
+  <mat-form-field>
+    <mat-label>Übungen auswählen</mat-label>
+    <mat-select [ngModel]="exercise"
+                (selectionChange)="onSelectionChange($event)"
+                name="selectedExercises"
+                multiple
+                required
+                [compareWith]="compareExercises"
+                #selectCtrl="ngModel">
+      @for (ex of allExercises; track ex.id) {
+        <mat-option [value]="ex">{{ex.name}}</mat-option>
+      }
+    </mat-select>
+    @if (selectCtrl.invalid && selectCtrl.touched) {
+      <mat-error>Wähle mindestens eine Übung aus!</mat-error>
+    }
+  </mat-form-field>
+
+  <button type="button" mat-flat-button class="button blue" (click)="addExercise()">
+    Neue Übung erstellen
+  </button>
+
+  <button type="button"
+          mat-flat-button
+          class="button blue"
+          (click)="saveWorkout()"
+          [disabled]="workoutForm.invalid"
+          routerLink="/">
+    Trainingsplan speichern
+  </button>
+</form>

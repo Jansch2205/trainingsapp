@@ -1,0 +1,25 @@
+<div [formGroup]="exerciseForm" class="flex-container">
+  <h2 mat-dialog-title>{{exercise.name}}</h2>
+
+  <mat-form-field>
+    <mat-label>Sätze</mat-label>
+    <input matInput type="number" formControlName="sets">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Wiederholungen</mat-label>
+    <input matInput type="number" formControlName="reps">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Gewicht (Kg)</mat-label>
+    <input matInput type="number" formControlName="weight">
+  </mat-form-field>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)='onCancel()'>Abbrechen</button>
+    <button mat-raised-button color="primary" (click)="onSave()" [disabled]="exerciseForm.invalid">
+      Speichern
+    </button>
+  </mat-dialog-actions>
+</div>
