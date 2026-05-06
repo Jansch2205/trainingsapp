@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1778082665362,
+  "timestamp": 1778082976089,
   "index": "/trainingsapp/index.html",
   "assetGroups": [
     {
@@ -27,8 +27,7 @@
       "urls": [
         "/trainingsapp/favicon.ico",
         "/trainingsapp/icon-192x192.png",
-        "/trainingsapp/manifest.webmanifest",
-        "/trainingsapp/manifest.webmanifest.json"
+        "/trainingsapp/manifest.webmanifest"
       ],
       "patterns": []
     }
@@ -40,7 +39,6 @@
     "/trainingsapp/index.html": "3749f4d9f5ed46a3d2de155133f07aa8f0737d6f",
     "/trainingsapp/main-X5GC7PJT.js": "4025a5829bdf601c9ab101c50b2aabdae4a96eee",
     "/trainingsapp/manifest.webmanifest": "5ce4027ae47056eecffb097a32a1630dce6819f1",
-    "/trainingsapp/manifest.webmanifest.json": "5ce4027ae47056eecffb097a32a1630dce6819f1",
     "/trainingsapp/styles-OLB3CZ2S.css": "987c2dba03d03c8327f217bff5f593120557b9b3"
   },
   "navigationUrls": [
