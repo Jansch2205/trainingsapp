@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1778081219291,
+  "timestamp": 1778081718666,
   "index": "/trainingsapp/index.html",
   "assetGroups": [
     {
@@ -10,13 +10,7 @@
       "cacheQueryOptions": {
         "ignoreVary": true
       },
-      "urls": [
-        "/trainingsapp/favicon.ico",
-        "/trainingsapp/index.html",
-        "/trainingsapp/main-X5GC7PJT.js",
-        "/trainingsapp/manifest.webmanifest",
-        "/trainingsapp/styles-OLB3CZ2S.css"
-      ],
+      "urls": [],
       "patterns": []
     },
     {
@@ -26,21 +20,12 @@
       "cacheQueryOptions": {
         "ignoreVary": true
       },
-      "urls": [
-        "/trainingsapp/icon-192x192.png"
-      ],
+      "urls": [],
       "patterns": []
     }
   ],
   "dataGroups": [],
-  "hashTable": {
-    "/trainingsapp/favicon.ico": "9c39f434fe1261f68c5e3eefdf734630d99c5670",
-    "/trainingsapp/icon-192x192.png": "f462b56e11376fe749b42672c20b35e1820803cc",
-    "/trainingsapp/index.html": "3749f4d9f5ed46a3d2de155133f07aa8f0737d6f",
-    "/trainingsapp/main-X5GC7PJT.js": "4025a5829bdf601c9ab101c50b2aabdae4a96eee",
-    "/trainingsapp/manifest.webmanifest": "5ce4027ae47056eecffb097a32a1630dce6819f1",
-    "/trainingsapp/styles-OLB3CZ2S.css": "987c2dba03d03c8327f217bff5f593120557b9b3"
-  },
+  "hashTable": {},
   "navigationUrls": [
     {
       "positive": true,
