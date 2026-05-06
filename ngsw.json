@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1778014680878,
+  "timestamp": 1778078214364,
   "index": "/trainingsapp/index.html",
   "assetGroups": [
     {
@@ -38,10 +38,6 @@
     {
       "positive": false,
       "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
-    },
-    {
-      "positive": false,
-      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
     }
   ],
   "navigationRequestStrategy": "performance"
