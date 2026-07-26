@@ -29,6 +29,9 @@ export class OpenWorkoutPlan implements OnInit {
       let workout = workouts.find(w => w.id === Number(id));
       if(workout){
         this.workout = workout;
+        if(!this.workout.finishedHistory) {
+          this.workout.finishedHistory = [];
+        }
       }
       else {
         this.router.navigate(['/']);
@@ -48,11 +51,13 @@ export class OpenWorkoutPlan implements OnInit {
 
     const heute = new Date();
 
-    this.workout.lastFinished = heute.toLocaleDateString('de-DE', {
+    this.workout.finishedHistory.push(heute.toLocaleString('de-DE', {
       day: '2-digit',
       month: 'long',
-      year: 'numeric'
-    });
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    }));
 
     let workouts = this.storage.getArray<Workout>('workout_plans');
     const index = workouts.findIndex(w => w.id === this.workout.id);

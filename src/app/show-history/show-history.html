@@ -1,0 +1,16 @@
+<div class="content">
+  <h1 class="headline">{{exercise.machineNumber === 0 ? "" : exercise.machineNumber}} {{exercise.name}}</h1>
+  <div class="button-row">
+    <button mat-flat-button class="button blue" routerLink="/exercise/{{workout.id}}/{{exercise.id}}">Zurück</button>
+  </div>
+  <mat-card-content>
+    <div class="chart-container">
+      <canvas
+        baseChart
+        [data]="lineChartData"
+        [options]="lineChartOptions"
+        [type]="'line'">
+      </canvas>
+    </div>
+  </mat-card-content>
+</div>

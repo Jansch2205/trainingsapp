@@ -1,3 +1,5 @@
+import {History} from './history';
+
 export interface Exercise {
   id: number;
   name: string;
@@ -11,5 +13,5 @@ export interface WorkoutExercise {
   reps: number;
   weight: number;
   finishedSets: number;
-  lastWeightChange?: string;
+  weightHistory: History[];
 }

@@ -14,13 +14,16 @@
     <h3>Notizen</h3>
     <p>{{exercise.notes}}</p>
   }
-  @if(workoutExercise.lastWeightChange) {
-    <p>Letztes Gewichts Update</p>
-    <p class="lastWeightChange">{{workoutExercise.lastWeightChange}}</p>
+  @if(workoutExercise.weightHistory.length > 0) {
+    <div routerLink="/gewichtsVerlauf/{{workout.id}}/{{exercise.id}}">
+      <h3>Letztes Gewichts Update</h3>
+      <p class="lastWeightChange">{{workoutExercise.weightHistory[workoutExercise.weightHistory.length - 1].date | date:'dd.MM.yyyy'}}</p>
+      <p><small>(Für Diagramm klicken)</small></p>
+    </div>
   }
   <div>
     <button matFab class="button" (click)="editExercise()">
-      <mat-icon>edit</mat-icon>
+      <mat-icon fontIcon="edit"></mat-icon>
     </button>
   </div>
 </div>

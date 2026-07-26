@@ -1,0 +1,14 @@
+<div class="content">
+  <h1 class="headline">{{workout.name}}</h1>
+  <div class="button-row">
+    <button mat-flat-button class="button blue" routerLink="/workout/{{workout.id}}">Zurück</button>
+  </div>
+  <div class="list">
+    @for (activity of workout.finishedHistory; track activity){
+        <div class="activity-item">
+          <h3>{{$count - $index}}</h3>
+          <span>{{activity}}</span>
+        </div>
+    }
+  </div>
+</div>

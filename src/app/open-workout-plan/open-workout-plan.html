@@ -1,7 +1,10 @@
 <div class="content">
   <h1 class="headline">{{workout.name}}</h1>
-  @if (workout.lastFinished) {
-    <p>Zuletzt beendet: {{workout.lastFinished}}</p>
+  @if (workout.finishedHistory[workout.finishedHistory.length - 1]) {
+    <div routerLink="/abschlussVerlauf/{{workout.id}}">
+      <p>Zuletzt beendet: {{workout.finishedHistory[workout.finishedHistory.length - 1]}}</p>
+      <p><small>(Für Liste klicken)</small></p>
+    </div>
   }
   <div class="button-row">
     <button mat-flat-button class="button blue" routerLink="/">Zurück</button>

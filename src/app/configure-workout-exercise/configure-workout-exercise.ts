@@ -6,6 +6,7 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 import {StorageService} from '../services/storage';
 import {Exercise, WorkoutExercise} from '../interface/exercise';
 import {Router} from '@angular/router';
+import {History} from '../interface/history';
 
 @Component({
   selector: 'app-configure-workout-exercise',
@@ -56,19 +57,31 @@ export class ConfigureWorkoutExercise {
   onSave(): void {
     if (this.exerciseForm.valid) {
       const formValue = this.exerciseForm.value;
+      const newWeight = formValue.weight ?? 0;
 
-      const heute = new Date();
+      let history: History[] = this.data?.weightHistory ? [...this.data.weightHistory] : [];
+
+      if (this.data && this.data.weight !== newWeight) {
+        const today = new Date();
+        const lastEntry = history.length > 0 ? history[history.length - 1] : null;
+
+        if (lastEntry && new Date(lastEntry.date).toDateString() === today.toDateString()) {
+          lastEntry.weight = newWeight;
+        } else {
+          history.push({ date: today, weight: newWeight });
+        }
+      }
 
       let workoutExercise: WorkoutExercise = {
-        id: this.data.id,
+        id: this.data?.id,
         sets: formValue.sets ?? 0,
         reps: formValue.reps ?? 0,
-        weight: formValue.weight ?? 0,
-        finishedSets: this.data ? this.data.finishedSets : 0,
-        lastWeightChange: heute.toLocaleDateString('de-DE', {day: '2-digit', month: 'long', year: 'numeric'})
+        weight: newWeight,
+        finishedSets: this.data?.finishedSets ?? 0,
+        weightHistory: history
       };
 
-      this.dialogRef.close({workoutExercise: workoutExercise});
+      this.dialogRef.close({ workoutExercise });
     }
   }
 

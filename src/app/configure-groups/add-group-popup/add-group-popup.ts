@@ -7,7 +7,6 @@ import {StorageService} from '../../services/storage';
 import {Workout} from '../../interface/workout';
 import {MatOption} from '@angular/material/core';
 import {MatSelect} from '@angular/material/select';
-import {Exercise} from '../../interface/exercise';
 
 @Component({
   selector: 'app-add-exercise-popup',

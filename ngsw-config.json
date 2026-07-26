@@ -7,11 +7,10 @@
       "installMode": "prefetch",
       "resources": {
         "files": [
-          "favicon.ico",
           "index.html",
           "manifest.webmanifest",
-          "*.css",
-          "*.js"
+          "*.js",
+          "*.css"
         ]
       }
     },
@@ -21,8 +20,9 @@
       "updateMode": "prefetch",
       "resources": {
         "files": [
+          "favicon.ico",
           "assets/**",
-          "*.(svg|cur|jpg|jpeg|png|apng|webp|avif|apple-touch-icon|manifest)"
+          "**/*.(svg|cur|jpg|jpeg|png|apng|webp|avif|apple-touch-icon|manifest)"
         ]
       }
     }

@@ -10,6 +10,7 @@ import {AddExercisePopup} from '../add-exercise-popup/add-exercise-popup';
 import {Workout} from '../interface/workout';
 import {FormsModule} from '@angular/forms';
 import {ConfigureWorkoutExercise} from '../configure-workout-exercise/configure-workout-exercise';
+import {History} from '../interface/history';
 
 @Component({
   selector: 'app-add-workout-plan',
@@ -91,12 +92,14 @@ export class AddWorkoutPlan implements OnInit {
       if (savedConfig) {
         return savedConfig;
       } else {
+        let history: History[] = []
         return {
           id: ex.id,
           reps: 10,
           sets: 3,
           weight: 0,
-          finishedSets: 0
+          finishedSets: 0,
+          weightHistory: history
         };
       }
     });
@@ -108,7 +111,8 @@ export class AddWorkoutPlan implements OnInit {
           id: Number(id),
           name: this.name,
           workoutExercises: workoutExercises,
-          started: false
+          started: false,
+          finishedHistory: workouts[index].finishedHistory
         };
       }
     } else {
@@ -116,7 +120,8 @@ export class AddWorkoutPlan implements OnInit {
         id: Date.now(),
         name: this.name,
         workoutExercises: workoutExercises,
-        started: false
+        started: false,
+        finishedHistory: []
       };
       workouts.unshift(workout);
     }

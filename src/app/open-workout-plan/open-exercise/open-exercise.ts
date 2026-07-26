@@ -1,18 +1,18 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {MatButton, MatFabButton} from '@angular/material/button';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { MatButton, MatFabButton } from '@angular/material/button';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { StorageService } from '../../services/storage';
-import {Exercise, WorkoutExercise} from '../../interface/exercise';
+import { Exercise, WorkoutExercise } from '../../interface/exercise';
 import { Workout } from '../../interface/workout';
-import {AddExercisePopup} from '../../add-exercise-popup/add-exercise-popup';
-import {MatDialog} from '@angular/material/dialog';
-import {MatIcon} from '@angular/material/icon';
-import {ConfigureWorkoutExercise} from '../../configure-workout-exercise/configure-workout-exercise';
+import { MatDialog } from '@angular/material/dialog';
+import { MatIcon } from '@angular/material/icon';
+import { ConfigureWorkoutExercise } from '../../configure-workout-exercise/configure-workout-exercise';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-open-exercise',
   standalone: true,
-  imports: [MatButton, RouterLink, MatFabButton, MatIcon],
+  imports: [MatButton, RouterLink, MatFabButton, MatIcon, DatePipe],
   templateUrl: './open-exercise.html',
   styleUrl: './open-exercise.scss',
 })
@@ -60,6 +60,14 @@ export class OpenExercise implements OnInit {
     }
 
     this.exercise = foundExercise;
+
+    if (!this.workoutExercise.weightHistory || this.workoutExercise.weightHistory.length === 0) {
+      this.workoutExercise.weightHistory = [{
+        date: new Date(),
+        weight: this.workoutExercise.weight
+      }];
+      this.saveWorkoutToStorage();
+    }
   }
 
   finishSet() {
@@ -71,16 +79,6 @@ export class OpenExercise implements OnInit {
 
     if (this.workoutExercise.finishedSets === this.workoutExercise.sets) {
       this.router.navigate(['/workout', this.workout.id]);
-    }
-  }
-
-  private saveWorkoutToStorage() {
-    const workouts = this.storage.getArray<Workout>('workout_plans');
-    const index = workouts.findIndex(w => w.id === this.workout.id);
-
-    if (index !== -1) {
-      workouts[index] = this.workout;
-      this.storage.saveArray<Workout>('workout_plans', workouts);
     }
   }
 
@@ -101,16 +99,19 @@ export class OpenExercise implements OnInit {
           this.workout.workoutExercises[index] = updatedEx;
         }
 
-        let allWorkouts = this.storage.getArray<Workout>('workout_plans');
-
-        const workoutIndex = allWorkouts.findIndex(w => w.id === this.workout.id);
-        if (workoutIndex !== -1) {
-          allWorkouts[workoutIndex] = this.workout;
-        }
-
-        this.storage.saveArray<Workout>('workout_plans', allWorkouts);
+        this.saveWorkoutToStorage();
         this.cdr.detectChanges();
       }
     });
+  }
+
+  private saveWorkoutToStorage() {
+    const workouts = this.storage.getArray<Workout>('workout_plans');
+    const index = workouts.findIndex(w => w.id === this.workout.id);
+
+    if (index !== -1) {
+      workouts[index] = this.workout;
+      this.storage.saveArray<Workout>('workout_plans', workouts);
+    }
   }
 }

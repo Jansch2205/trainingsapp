@@ -29,6 +29,10 @@ export class ConfigureGroups implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.loadGroups();
+  }
+
+  loadGroups() {
     this.workouts = this.storage.getArray<Workout>('workout_plans')
     this.workouts.sort((a, b) => a.name.localeCompare(b.name));
 
@@ -56,7 +60,7 @@ export class ConfigureGroups implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.cdr.detectChanges();
+        this.loadGroups();
       }
     });
   }
