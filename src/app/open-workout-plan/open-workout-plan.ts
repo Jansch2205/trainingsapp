@@ -39,7 +39,7 @@ export class OpenWorkoutPlan implements OnInit {
     }
   }
 
-  resetWorkout() {
+  resetWorkout(saveDate: boolean) {
     const resetExercises = this.workout.workoutExercises.map(ex => ({
       ...ex,
       finishedSets: 0
@@ -49,15 +49,16 @@ export class OpenWorkoutPlan implements OnInit {
       workoutExercises: resetExercises
     };
 
-    const heute = new Date();
-
-    this.workout.finishedHistory.push(heute.toLocaleString('de-DE', {
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    }));
+    if (saveDate) {
+      const heute = new Date();
+      this.workout.finishedHistory.push(heute.toLocaleString('de-DE', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      }));
+    }
 
     let workouts = this.storage.getArray<Workout>('workout_plans');
     const index = workouts.findIndex(w => w.id === this.workout.id);

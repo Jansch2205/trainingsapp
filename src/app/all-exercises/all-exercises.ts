@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {MatButton, MatFabButton} from '@angular/material/button';
+import {MatButton, MatMiniFabButton} from '@angular/material/button';
 import {RouterLink} from '@angular/router';
 import {Exercise} from '../interface/exercise';
 import {StorageService} from '../services/storage';
@@ -14,7 +14,7 @@ import {ConfirmationPopup} from '../confirmation-popup/confirmation-popup';
   imports: [
     MatButton,
     RouterLink,
-    MatFabButton,
+    MatMiniFabButton,
     MatIcon
   ],
   templateUrl: './all-exercises.html',
@@ -42,7 +42,8 @@ export class AllExercises implements OnInit {
 
   editExercise(exercise: Exercise) {
     const dialogRef = this.dialog.open(AddExercisePopup, {
-      width: '300px',
+      width: '360px',
+      maxWidth: '90vw',
       data: exercise
     });
 

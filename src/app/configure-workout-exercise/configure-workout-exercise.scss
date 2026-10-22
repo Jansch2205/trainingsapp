@@ -1,6 +1,27 @@
 .flex-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-top: 10px;
+  gap: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  padding: 8px 20px 6px;
+}
+
+h2 {
+  margin-bottom: 8px;
+  color: #f7fbff;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-dialog-actions {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 8px;
+  white-space: nowrap;
 }

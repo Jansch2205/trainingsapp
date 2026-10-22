@@ -1,26 +1,39 @@
-<div class="content">
-  <h1 class="headline">{{workout.name}}</h1>
-  @if (workout.finishedHistory[workout.finishedHistory.length - 1]) {
-    <div routerLink="/abschlussVerlauf/{{workout.id}}">
-      <p>Zuletzt beendet: {{workout.finishedHistory[workout.finishedHistory.length - 1]}}</p>
-      <p><small>(Für Liste klicken)</small></p>
-    </div>
-  }
-  <div class="button-row">
-    <button mat-flat-button class="button blue" routerLink="/">Zurück</button>
-  </div>
-  @for (ex of workout.workoutExercises; track ex.id) {
-    <div class="exercise" routerLink="/exercise/{{workout.id}}/{{ex.id}}">
-      <h3>{{ $index + 1 }}. {{ getName(ex.id) }}</h3>
-      @if(ex.finishedSets === ex.sets) {
-        <p class="finished">Abgeschlossen</p>
-      } @else if (ex.finishedSets < ex.sets && ex.finishedSets > 0) {
-        <p class="finished">Gestartet</p>
-      } @else {
-        <p class="finished">Nicht gestartet</p>
+<div class="page-shell">
+  <div class="content">
+    <header class="topbar">
+      <button mat-flat-button class="button secondary" routerLink="/">Zurück</button>
+      <h1 class="headline">{{workout.name}}</h1>
+    </header>
+
+    @if (workout.finishedHistory[workout.finishedHistory.length - 1]) {
+      <div class="history-link" routerLink="/abschlussVerlauf/{{workout.id}}">
+        <span class="label">Zuletzt beendet</span>
+        <strong>{{workout.finishedHistory[workout.finishedHistory.length - 1]}}</strong>
+        <small>Für Liste klicken</small>
+      </div>
+    }
+
+    <section class="exercise-list">
+      @for (ex of workout.workoutExercises; track ex.id) {
+        <article class="exercise" routerLink="/exercise/{{workout.id}}/{{ex.id}}">
+          <div class="exercise-copy">
+            <h3>{{ $index + 1 }}. {{ getName(ex.id) }}</h3>
+          </div>
+
+          <span class="status-pill" [class.is-done]="ex.finishedSets === ex.sets" [class.is-started]="ex.finishedSets < ex.sets && ex.finishedSets > 0">
+            @if(ex.finishedSets === ex.sets) {
+              Abgeschlossen
+            } @else if (ex.finishedSets < ex.sets && ex.finishedSets > 0) {
+              Gestartet
+            } @else {
+              Nicht gestartet
+            }
+          </span>
+        </article>
       }
-      <br>
-    </div>
-  }
-  <button mat-flat-button class="button blue" routerLink="/" (click)="resetWorkout()">Training abschließen</button>
+    </section>
+
+    <button mat-flat-button class="button primary" routerLink="/" (click)="resetWorkout(true)">Training abschließen</button>
+    <button mat-flat-button class="button danger" (click)="resetWorkout(false)">Training abbrechen</button>
+  </div>
 </div>

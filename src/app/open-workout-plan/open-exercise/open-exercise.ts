@@ -84,7 +84,8 @@ export class OpenExercise implements OnInit {
 
   editExercise() {
     const dialogRef = this.dialog.open(ConfigureWorkoutExercise, {
-      width: '300px',
+      width: '360px',
+      maxWidth: '90vw',
       data: this.workoutExercise
     });
 

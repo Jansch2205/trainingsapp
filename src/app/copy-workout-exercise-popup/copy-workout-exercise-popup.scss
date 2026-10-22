@@ -1,0 +1,52 @@
+:host {
+  display: block;
+}
+
+mat-dialog-content {
+  min-width: min(78vw, 320px);
+}
+
+.source-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.source-option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  background: rgba(148, 163, 184, 0.06);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.source-option.selected {
+  border-color: #4fb2ff;
+  background: rgba(79, 178, 255, 0.14);
+}
+
+.source-name {
+  font-weight: 700;
+}
+
+.source-group {
+  color: #b6c7db;
+  font-size: 0.9rem;
+}
+
+.overwrite-warning {
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(248, 191, 36, 0.14);
+  color: #fde68a;
+}
+
+mat-dialog-actions {
+  gap: 8px;
+}

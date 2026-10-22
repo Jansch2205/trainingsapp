@@ -7,4 +7,5 @@ export interface Workout {
   started: boolean;
   finishedHistory: string[];
   group?: string;
+  groupOrder?: number;
 }

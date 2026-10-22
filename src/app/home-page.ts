@@ -1,8 +1,8 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {Workout} from './interface/workout';
 import {MatDialog} from '@angular/material/dialog';
-import {StorageService} from './services/storage';
-import {MatButton, MatFabButton} from '@angular/material/button';
+import {StorageService, WORKOUT_GROUP_ORDER_STORAGE_KEY} from './services/storage';
+import {MatButton, MatMiniFabButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {ConfirmationPopup} from './confirmation-popup/confirmation-popup';
 import {Exercise} from './interface/exercise';
@@ -13,7 +13,7 @@ import {RouterLink} from '@angular/router';
   imports: [
     MatButton,
     MatIcon,
-    MatFabButton,
+    MatMiniFabButton,
     RouterLink,
   ],
   templateUrl: './home-page.html',
@@ -22,6 +22,8 @@ import {RouterLink} from '@angular/router';
 export class HomePage implements OnInit {
   workoutPlans: Workout[] = [];
   allExercises: Exercise[] = [];
+  groupedWorkouts: { groupName: string; workouts: Workout[]; collapsed: boolean }[] = [];
+  private readonly groupCollapseStorageKey = 'workout_group_collapse_state';
 
   constructor(
     private dialog: MatDialog,
@@ -47,6 +49,83 @@ export class HomePage implements OnInit {
     this.allExercises.sort((a, b) => b.id - a.id);
     this.storage.saveArray<Workout>('workout_plans', this.workoutPlans);
     this.storage.saveArray<Exercise>('all_exercises', this.allExercises);
+    this.buildGroupedWorkouts();
+    this.cdr.detectChanges();
+  }
+
+  private buildGroupedWorkouts(): void {
+    const groupState = this.getGroupCollapseState();
+    const groups = new Map<string, Workout[]>();
+
+    this.workoutPlans.forEach((workout) => {
+      const groupName = workout.group?.trim() || 'Keine Gruppe';
+      const existing = groups.get(groupName) ?? [];
+      existing.push(workout);
+      groups.set(groupName, existing);
+    });
+
+    const savedOrder = this.storage.getArray<string>(WORKOUT_GROUP_ORDER_STORAGE_KEY);
+    this.groupedWorkouts = Array.from(groups.entries())
+      .sort(([groupA], [groupB]) => {
+        const indexA = savedOrder.indexOf(groupA);
+        const indexB = savedOrder.indexOf(groupB);
+
+        if (indexA !== -1 || indexB !== -1) {
+          if (indexA === -1) {
+            return 1;
+          }
+          if (indexB === -1) {
+            return -1;
+          }
+          return indexA - indexB;
+        }
+        if (groupA === 'Keine Gruppe') {
+          return 1;
+        }
+        if (groupB === 'Keine Gruppe') {
+          return -1;
+        }
+        return groupA.localeCompare(groupB);
+      })
+      .map(([groupName, workouts]) => ({
+        groupName,
+        workouts: workouts.sort((a, b) => {
+          if (a.groupOrder !== undefined || b.groupOrder !== undefined) {
+            if (a.groupOrder === undefined) {
+              return 1;
+            }
+            if (b.groupOrder === undefined) {
+              return -1;
+            }
+            if (a.groupOrder !== b.groupOrder) {
+              return a.groupOrder - b.groupOrder;
+            }
+          }
+          return b.id - a.id;
+        }),
+        collapsed: groupState[groupName] ?? false,
+      }));
+  }
+
+  private getGroupCollapseState(): Record<string, boolean> {
+    const rawState = localStorage.getItem(this.groupCollapseStorageKey);
+
+    if (!rawState) {
+      return {};
+    }
+
+    try {
+      return JSON.parse(rawState) as Record<string, boolean>;
+    } catch {
+      return {};
+    }
+  }
+
+  toggleGroup(groupName: string): void {
+    const state = this.getGroupCollapseState();
+    state[groupName] = !(state[groupName] ?? false);
+    localStorage.setItem(this.groupCollapseStorageKey, JSON.stringify(state));
+    this.buildGroupedWorkouts();
     this.cdr.detectChanges();
   }
 
@@ -156,4 +235,3 @@ export class HomePage implements OnInit {
     this.allExercises = currentExercises;
   }
 }
-

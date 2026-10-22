@@ -5,12 +5,16 @@ import {MatError, MatFormField, MatInput, MatLabel} from '@angular/material/inpu
 import {Exercise, WorkoutExercise} from '../interface/exercise';
 import {MatDialog} from '@angular/material/dialog';
 import {StorageService} from '../services/storage';
-import {MatOption, MatSelect, MatSelectChange} from '@angular/material/select';
+import {MatAutocomplete, MatAutocompleteSelectedEvent, MatAutocompleteTrigger} from '@angular/material/autocomplete';
+import {MatOption} from '@angular/material/core';
 import {AddExercisePopup} from '../add-exercise-popup/add-exercise-popup';
 import {Workout} from '../interface/workout';
 import {FormsModule} from '@angular/forms';
-import {ConfigureWorkoutExercise} from '../configure-workout-exercise/configure-workout-exercise';
 import {History} from '../interface/history';
+import {CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
+import {MatIcon} from '@angular/material/icon';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {CopyWorkoutExercisePopup, WorkoutExerciseConfigurationSource} from '../copy-workout-exercise-popup/copy-workout-exercise-popup';
 
 @Component({
   selector: 'app-add-workout-plan',
@@ -20,10 +24,15 @@ import {History} from '../interface/history';
     MatFormField,
     MatLabel,
     MatInput,
-    MatSelect,
+    MatAutocomplete,
+    MatAutocompleteTrigger,
     MatOption,
     FormsModule,
-    MatError
+    MatError,
+    CdkDropList,
+    CdkDrag,
+    CdkDragHandle,
+    MatIcon
   ],
   templateUrl: './add-workout-plan.html',
   styleUrl: './add-workout-plan.scss',
@@ -32,14 +41,20 @@ export class AddWorkoutPlan implements OnInit {
   name = ""
   exercise: Exercise[] = []
   allExercises: Exercise[] = []
+  exerciseSearch = '';
   existingWorkoutExercises: WorkoutExercise[] = [];
 
   constructor(
     private dialog: MatDialog,
     private storage: StorageService,
     private cdr: ChangeDetectorRef,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private snackBar: MatSnackBar
   ) {}
+
+  get isEditMode(): boolean {
+    return this.route.snapshot.paramMap.has('id');
+  }
 
   ngOnInit() {
     this.allExercises = this.storage.getArray<Exercise>('all_exercises');
@@ -68,7 +83,8 @@ export class AddWorkoutPlan implements OnInit {
 
   addExercise() {
     const dialogRef = this.dialog.open(AddExercisePopup, {
-      width: '300px'
+      width: '360px',
+      maxWidth: '90vw'
     });
 
     dialogRef.afterClosed().subscribe((result: { exercise: Exercise } | false) => {
@@ -107,12 +123,15 @@ export class AddWorkoutPlan implements OnInit {
     if (id) {
       const index = workouts.findIndex(w => w.id === Number(id));
       if (index !== -1) {
+        const existingWorkout = workouts[index];
         workouts[index] = {
           id: Number(id),
           name: this.name,
           workoutExercises: workoutExercises,
           started: false,
-          finishedHistory: workouts[index].finishedHistory
+          finishedHistory: existingWorkout.finishedHistory,
+          group: existingWorkout.group,
+          groupOrder: existingWorkout.groupOrder
         };
       }
     } else {
@@ -133,37 +152,81 @@ export class AddWorkoutPlan implements OnInit {
     return ex1 && ex2 ? ex1.id === ex2.id : ex1 === ex2;
   }
 
-  onSelectionChange(event: MatSelectChange) {
-    const currentSelection = event.value as Exercise[];
-
-    const updatedOrder = this.exercise.filter(ex =>
-      currentSelection.some(s => s.id === ex.id)
+  get filteredExercises(): Exercise[] {
+    const search = this.exerciseSearch.trim().toLocaleLowerCase();
+    return this.allExercises.filter(exercise =>
+      !this.exercise.some(selected => selected.id === exercise.id) &&
+      (exercise.name.toLocaleLowerCase().includes(search) ||
+        String(exercise.machineNumber).includes(search))
     );
-
-    currentSelection.forEach(s => {
-      const isNew = !updatedOrder.some(ex => ex.id === s.id);
-      if (isNew) {
-        updatedOrder.push(s);
-      }
-    });
-
-    this.exercise = updatedOrder;
-    this.cdr.detectChanges();
   }
 
-  // FUNKTIONIERT NOCH NICHT
-  configureExercise(exercise: Exercise): void {
-    return;
-    let workoutExercise = {id: exercise.id, reps: 10, sets: 3, weight: 0, finishedSets: 0};
+  displayExercise(exercise: Exercise | string | null): string {
+    return typeof exercise === 'string' ? exercise : exercise?.name ?? '';
+  }
 
-    const dialogRef = this.dialog.open(ConfigureWorkoutExercise, {
-      width: '300px',
-      data: workoutExercise
+  addExistingExercise(event: MatAutocompleteSelectedEvent): void {
+    const exercise = event.option.value as Exercise;
+    if (!this.exercise.some(selected => selected.id === exercise.id)) {
+      this.exercise = [...this.exercise, exercise];
+    }
+    this.exerciseSearch = '';
+  }
+
+  removeExercise(exerciseId: number): void {
+    this.exercise = this.exercise.filter(exercise => exercise.id !== exerciseId);
+  }
+
+  dropExercise(event: CdkDragDrop<Exercise[]>): void {
+    moveItemInArray(this.exercise, event.previousIndex, event.currentIndex);
+  }
+
+  configureExercise(exercise: Exercise): void {
+    const currentWorkoutId = Number(this.route.snapshot.paramMap.get('id'));
+    const workouts = this.storage.getArray<Workout>('workout_plans');
+    const sources: WorkoutExerciseConfigurationSource[] = workouts
+      .filter(workout => !this.isEditMode || workout.id !== currentWorkoutId)
+      .flatMap(workout => {
+        const workoutExercise = workout.workoutExercises.find(item => item.id === exercise.id);
+        return workoutExercise ? [{workout, workoutExercise}] : [];
+      });
+
+    if (sources.length === 0) {
+      this.snackBar.open(
+        'Für diese Übung gibt es keine Konfiguration in einem anderen Trainingsplan.',
+        'Schließen',
+        {duration: 4000}
+      );
+      return;
+    }
+
+    const dialogRef = this.dialog.open(CopyWorkoutExercisePopup, {
+      width: 'min(90vw, 420px)',
+      data: {
+        exerciseName: exercise.name,
+        sources,
+        isEditMode: this.isEditMode
+      }
     });
 
     dialogRef.afterClosed().subscribe((result: { workoutExercise: WorkoutExercise } | false) => {
       if (result) {
+        const currentConfiguration = this.existingWorkoutExercises.find(item => item.id === exercise.id);
+        const copiedConfiguration: WorkoutExercise = {
+          ...result.workoutExercise,
+          id: exercise.id,
+          finishedSets: currentConfiguration?.finishedSets ?? 0,
+          weightHistory: currentConfiguration?.weightHistory ?? []
+        };
+        const existingIndex = this.existingWorkoutExercises.findIndex(item => item.id === exercise.id);
 
+        if (existingIndex === -1) {
+          this.existingWorkoutExercises = [...this.existingWorkoutExercises, copiedConfiguration];
+        } else {
+          this.existingWorkoutExercises = this.existingWorkoutExercises.map(item =>
+            item.id === exercise.id ? copiedConfiguration : item
+          );
+        }
       }
     });
   }

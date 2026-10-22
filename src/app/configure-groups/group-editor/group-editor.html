@@ -1,0 +1,80 @@
+<div class="page-shell">
+  <header class="topbar">
+    <button mat-flat-button class="button secondary" routerLink="/gruppenVerwalten">Zurück</button>
+    <h1 class="headline">{{isEditMode ? 'Gruppe bearbeiten' : 'Gruppe hinzufügen'}}</h1>
+  </header>
+
+  <form class="panel flex-container" #groupForm="ngForm" (ngSubmit)="onSave()">
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput
+             [(ngModel)]="name"
+             name="workoutName"
+             required
+             minlength="3"
+             #nameCtrl="ngModel">
+      @if (nameCtrl.invalid && nameCtrl.touched) {
+        <mat-error>Der Name muss mindestens 3 Zeichen lang sein!</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="section-header">
+      <h2>Ausgewählte Workouts</h2>
+    </div>
+    <div class="selected-workouts"
+         cdkDropList
+         [cdkDropListData]="selectedWorkouts"
+         (cdkDropListDropped)="dropWorkout($event)">
+      @for (workout of selectedWorkouts; track workout.id; let i = $index) {
+        <div class="selected-workout" cdkDrag>
+          <button type="button"
+                  class="drag-handle"
+                  cdkDragHandle
+                  aria-label="Workout verschieben">
+            <mat-icon>drag_indicator</mat-icon>
+          </button>
+          <span class="workout-name">{{ i + 1 }}. {{ workout.name }}</span>
+          <button type="button"
+                  class="remove-workout"
+                  [attr.aria-label]="workout.name + ' aus der Gruppe entfernen'"
+                  (click)="removeWorkout(workout.id)">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      } @empty {
+        <p class="empty-state">Noch keine Workouts ausgewählt.</p>
+      }
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Workouts suchen und hinzufügen</mat-label>
+      <input matInput
+             [(ngModel)]="workoutSearch"
+             [ngModelOptions]="{standalone: true}"
+             name="workoutSearch"
+             [matAutocomplete]="workoutAutocomplete">
+      <mat-autocomplete #workoutAutocomplete="matAutocomplete"
+                        [displayWith]="displayWorkout"
+                        (optionSelected)="addWorkout($event)">
+        @for (workout of filteredWorkouts; track workout.id) {
+          <mat-option [value]="workout">
+            {{ workout.name }}@if (workout.group && workout.group !== name) { ({{ workout.group }}) }
+          </mat-option>
+        } @empty {
+          <mat-option disabled>
+            {{ workoutSearch ? 'Keine Workouts gefunden.' : 'Keine weiteren Workouts verfügbar.' }}
+          </mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <div class="action-stack">
+      <button type="submit"
+              mat-flat-button
+              class="button primary"
+              [disabled]="groupForm.invalid">
+        Speichern
+      </button>
+    </div>
+  </form>
+</div>

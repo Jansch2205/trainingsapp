@@ -1,39 +1,162 @@
-.button-row {
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.page-shell {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.content {
+  text-align: left;
+}
+
+.topbar {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 18px;
+  margin-bottom: 16px;
 }
 
 .headline {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 75px 20px 20px;
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 2.8rem);
+  line-height: 1.1;
+  letter-spacing: -0.05em;
+  color: #f8fbff;
 }
 
-.blue {
-  background-color: #00448e !important;
-  color: lightgrey !important;
-
-  &:disabled, &[disabled] {
-    background-color: grey !important;
-    color: rgba(0, 0, 0, 0.5) !important;
-    cursor: not-allowed;
-  }
+.panel {
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.82), rgba(17, 24, 39, 0.95));
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 24px;
+  padding: 20px 16px 18px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.24);
 }
 
 .flex-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-top: 40px;
-}
-
-.button{
-  margin-bottom: 10px;
+  gap: 12px;
 }
 
 mat-form-field {
-  width: 300px;
-  margin-bottom: 20px;
+  width: 100%;
+}
+
+.section-header h2 {
+  margin: 8px 0 4px;
+  font-size: 1.05rem;
+  color: #dfeaf9;
+}
+
+.selected-exercises {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(148, 163, 184, 0.05);
+  border: 1px solid rgba(148, 163, 184, 0.08);
+  margin-bottom: 4px;
+}
+
+.selected-exercise {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(79, 178, 255, 0.08);
+  color: #edf5ff;
+}
+
+.exercise-config {
+  flex: 1;
+  margin: 0;
+  padding: 4px 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.exercise-config:hover {
+  color: #8dcfff;
+}
+
+.drag-handle,
+.remove-exercise {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border: 0;
+  background: transparent;
+  color: #b6c7db;
+}
+
+.drag-handle {
+  cursor: grab;
+  touch-action: none;
+}
+
+.remove-exercise {
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.remove-exercise:hover {
+  background: rgba(248, 113, 113, 0.16);
+  color: #fecaca;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.35;
+}
+
+.empty-state {
+  margin: 0;
+  color: #b6c7db;
+}
+
+.action-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.button {
+  width: 100%;
+  min-height: 48px;
+  border-radius: 16px !important;
+  font-weight: 700;
+}
+
+.button.primary {
+  background: linear-gradient(135deg, #4fb2ff, #1e6cf0) !important;
+  color: white !important;
+}
+
+.button.secondary {
+  align-self: flex-start;
+  background: rgba(148, 163, 184, 0.08) !important;
+  border: 1px solid rgba(148, 163, 184, 0.15) !important;
+  color: #edf4ff !important;
 }

@@ -1,10 +1,116 @@
-.activity-item {
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.page-shell {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.content {
   display: flex;
   flex-direction: column;
+  gap: 18px;
+}
+
+.topbar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.headline {
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 2.8rem);
+  line-height: 1.05;
+  letter-spacing: -0.05em;
+  color: #f7fbff;
+}
+
+.filter-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.82), rgba(17, 24, 39, 0.96));
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  color: #dfeaf9;
+}
+
+.filter-row span {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9ecbff;
+}
+
+.filter-row select {
+  appearance: none;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.9);
+  color: #edf5ff;
+  padding: 12px 14px;
+  font-size: 1rem;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.activity-item {
+  display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.82), rgba(17, 24, 39, 0.96));
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.16);
+}
+
+.index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: rgba(79, 178, 255, 0.15);
+  color: #8ec5ff;
+  font-weight: 800;
+}
+
+.activity-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.group-label {
+  color: #9ecbff;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.activity-item span {
+  color: #e3eefb;
+  line-height: 1.5;
 }
 
 .button {
-  margin-bottom: 50px;
+  align-self: flex-start;
+  min-height: 48px;
+  border-radius: 16px !important;
+  background: rgba(148, 163, 184, 0.08) !important;
+  border: 1px solid rgba(148, 163, 184, 0.15) !important;
+  color: #edf4ff !important;
+  font-weight: 700;
 }

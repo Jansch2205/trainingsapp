@@ -1,25 +1,52 @@
-<div class="content">
-  <h1 class="headline">Gruppen verwalten</h1>
-  <div class="button-row">
-    <button mat-flat-button class="button blue" routerLink="/">Zurück</button>
-    <button mat-flat-button class="button blue" (click)="addGroup()">Gruppe Hinzufügen</button>
-  </div>
+<div class="page-shell">
+  <div class="content">
+    <header class="topbar">
+      <button mat-flat-button class="button secondary" routerLink="/">Zurück</button>
+      <h1 class="headline">Gruppen verwalten</h1>
+    </header>
 
-  @for(group of groups; track group.name) {
-    <div class="exercise">
-      <h2>{{group.name}}</h2>
+    <div class="action-row">
+      <button mat-flat-button class="button primary" (click)="addGroup()">Gruppe hinzufügen</button>
     </div>
-    @for (workout of group.workoutName; track workout) {
-      <p>{{workout}}</p>
-    }
-    <div>
-      <button matFab (click)="editGroup(group)" class="button">
-        <mat-icon>edit</mat-icon>
-      </button>
-      <button matFab (click)="deleteOnePopup(group.name)" class="button">
-        <mat-icon>delete</mat-icon>
-      </button>
+
+    <div class="group-list">
+      @for(group of groups; track group.name; let index = $index) {
+        <article class="group-card">
+          <div class="group-copy">
+            <h2>{{group.name}}</h2>
+            @if (group.workoutName.length) {
+              <ul>
+                @for (workout of group.workoutName; track workout) {
+                  <li>{{workout}}</li>
+                }
+              </ul>
+            }
+          </div>
+
+          <div class="group-actions">
+            <button mat-mini-fab class="action-button reorder"
+                    (click)="moveGroup(group.name, -1)"
+                    [disabled]="index === 0"
+                    [attr.aria-label]="'Gruppe ' + group.name + ' nach oben verschieben'">
+              <mat-icon>arrow_upward</mat-icon>
+            </button>
+            <button mat-mini-fab class="action-button reorder"
+                    (click)="moveGroup(group.name, 1)"
+                    [disabled]="index === groups.length - 1"
+                    [attr.aria-label]="'Gruppe ' + group.name + ' nach unten verschieben'">
+              <mat-icon>arrow_downward</mat-icon>
+            </button>
+            @if (group.name !== 'Keine Gruppe') {
+              <button mat-mini-fab class="action-button edit" (click)="editGroup(group)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-mini-fab class="action-button delete" (click)="deleteOnePopup(group.name)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            }
+          </div>
+        </article>
+      }
     </div>
-    <p class="divider"></p>
-  }
+  </div>
 </div>

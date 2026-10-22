@@ -1,35 +1,54 @@
-<div class="content">
-  <h1 class="headline">Traingsapp</h1>
-  <div class="button-row">
-    <button mat-flat-button class="button blue" routerLink="/workoutHinzufuegen">Trainingsplan Hinzufügen</button>
-    <!--<button mat-flat-button class="button blue" routerLink="/gruppenVerwalten">Gruppen verwalten</button>-->
-    <button mat-flat-button class="button blue" routerLink="/exercisesVerwalten">Übungen verwalten</button>
-    <button mat-flat-button class="button blue" routerLink="/abschlussVerlauf/all">Verlauf</button>
-  </div>
-  <br>
-</div>
-
-<div class="entries">
-  @for(entry of workoutPlans; track entry) {
-    <div class="flex-container">
-      <h3 class="name" routerLink="/workout/{{entry.id}}">{{ entry.name }}</h3>
-      @if(entry.started) {
-        <p class="finished">Gestartet</p>
-      } @else {
-        <p class="finished">Nicht gestartet</p>
-      }
-      <div>
-        <button matFab routerLink="/workoutHinzufuegen/{{entry.id}}" class="button">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button matFab (click)="deleteOne(entry.id)" class="button">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
+<div class="page-shell">
+  <header class="topbar">
+    <div class="brand-block">
+      <span class="eyebrow">Fitness</span>
+      <h1 class="headline">Trainingsapp</h1>
     </div>
-  }
-  <!--
-  <button matFab (click)="test()" class="button">
-    <mat-icon>delete</mat-icon>
-  </button>-->
+  </header>
+
+  <main class="content">
+    <section class="action-panel">
+      <div class="button-row">
+        <button mat-flat-button class="button primary" routerLink="/workoutHinzufuegen">Trainingsplan Hinzufügen</button>
+        <button mat-flat-button class="button secondary" routerLink="/gruppenVerwalten">Gruppen verwalten</button>
+        <button mat-flat-button class="button secondary" routerLink="/exercisesVerwalten">Übungen verwalten</button>
+        <button mat-flat-button class="button secondary" routerLink="/abschlussVerlauf/all">Verlauf</button>
+      </div>
+    </section>
+
+    <section class="entries" aria-label="Trainingspläne">
+      @for(group of groupedWorkouts; track group.groupName) {
+        <div class="group-section">
+          <button mat-flat-button class="group-header" (click)="toggleGroup(group.groupName)">
+            <span>{{ group.groupName }}</span>
+            <mat-icon>{{ group.collapsed ? 'expand_more' : 'expand_less' }}</mat-icon>
+          </button>
+
+          @if (!group.collapsed) {
+            <div class="workout-list">
+              @for(entry of group.workouts; track entry.id) {
+                <article class="workout-card" routerLink="/workout/{{entry.id}}">
+                  <div class="workout-main">
+                    <h3 class="name">{{ entry.name }}</h3>
+                    <span class="status-pill" [class.is-started]="entry.started">
+                      {{ entry.started ? 'Gestartet' : 'Nicht gestartet' }}
+                    </span>
+                  </div>
+
+                  <div class="card-actions" (click)="$event.stopPropagation()">
+                    <button mat-mini-fab class="action-button edit" routerLink="/workoutHinzufuegen/{{entry.id}}" aria-label="Trainingsplan bearbeiten">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-mini-fab class="action-button delete" (click)="deleteOne(entry.id)" aria-label="Trainingsplan löschen">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </article>
+              }
+            </div>
+          }
+        </div>
+      }
+    </section>
+  </main>
 </div>

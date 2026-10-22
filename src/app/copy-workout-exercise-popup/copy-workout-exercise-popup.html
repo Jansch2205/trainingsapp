@@ -1,0 +1,38 @@
+<h2 mat-dialog-title>Konfiguration für {{ data.exerciseName }} übernehmen</h2>
+
+<mat-dialog-content>
+  @if (confirmingOverwrite) {
+    <p class="overwrite-warning">
+      Die aktuelle Konfiguration dieser Übung wird mit der ausgewählten Konfiguration überschrieben.
+      Satzfortschritt und Gewichtsverlauf bleiben erhalten.
+    </p>
+  } @else {
+    <p>Wähle einen Trainingsplan aus, dessen Konfiguration übernommen werden soll:</p>
+    <div class="source-list">
+      @for (source of data.sources; track source.workout.id) {
+        <button type="button"
+                class="source-option"
+                [class.selected]="isSelected(source)"
+                [attr.aria-pressed]="isSelected(source)"
+                (click)="selectSource(source)">
+          <span class="source-name">{{ source.workout.name }}</span>
+          <span class="source-group">{{ getGroupName(source.workout) }}</span>
+        </button>
+      }
+    </div>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  @if (confirmingOverwrite) {
+    <button mat-button type="button" (click)="confirmingOverwrite = false">Zurück</button>
+  } @else {
+    <button mat-button type="button" (click)="onCancel()">Abbrechen</button>
+  }
+  <button mat-flat-button
+          type="button"
+          [disabled]="!selectedSource"
+          (click)="onApply()">
+    {{ confirmingOverwrite ? 'Konfiguration überschreiben' : 'Konfiguration übernehmen' }}
+  </button>
+</mat-dialog-actions>

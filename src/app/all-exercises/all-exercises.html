@@ -1,24 +1,35 @@
-<div class="content">
-  <h1 class="headline">Alle Übungen</h1>
-  <div class="button-row">
-    <button mat-flat-button class="button blue" routerLink="/">Zurück</button>
-    <button mat-flat-button class="button blue" (click)="deleteAll()">Alle löschen</button>
-  </div>
-  @for(exercise of exercises; track exercise.id) {
-    <div class="exercise">
-      <h2>{{exercise.machineNumber === 0 ? "" : exercise.machineNumber}} {{exercise.name}}</h2>
-      @if (exercise.notes !== "") {
-        <p>{{exercise.notes}}</p>
+<div class="page-shell">
+  <div class="content">
+    <header class="topbar">
+      <button mat-flat-button class="button secondary" routerLink="/">Zurück</button>
+      <h1 class="headline">Alle Übungen</h1>
+    </header>
+
+    <div class="action-row">
+      <button mat-flat-button class="button primary" (click)="deleteAll()">Alle löschen</button>
+    </div>
+
+    <div class="exercise-list">
+      @for(exercise of exercises; track exercise.id) {
+        <article class="exercise-card">
+          <div class="exercise-copy">
+            <span class="machine-tag">{{exercise.machineNumber === 0 ? "" : exercise.machineNumber}}</span>
+            <h2>{{exercise.name}}</h2>
+            @if (exercise.notes !== "") {
+              <p>{{exercise.notes}}</p>
+            }
+          </div>
+
+          <div class="exercise-actions">
+            <button mat-mini-fab class="action-button edit" (click)="editExercise(exercise)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-mini-fab class="action-button delete" (click)="deleteOnePopup(exercise.id)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </article>
       }
     </div>
-    <div>
-      <button matFab (click)="editExercise(exercise)" class="button">
-        <mat-icon>edit</mat-icon>
-      </button>
-      <button matFab (click)="deleteOnePopup(exercise.id)" class="button">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div>
-    <p class="divider"></p>
-  }
+  </div>
 </div>

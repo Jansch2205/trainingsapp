@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+export const WORKOUT_GROUP_ORDER_STORAGE_KEY = 'workout_group_order';
+
 @Injectable({
   providedIn: 'root'
 })
