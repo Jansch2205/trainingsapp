@@ -13,3 +13,18 @@ mat-dialog-actions {
   gap: 8px;
   padding-top: 8px;
 }
+:host {
+  display: block;
+}
+
+h2 {
+  margin: 0 0 12px;
+  color: #f7fbff;
+}
+
+mat-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 8px;
+}
