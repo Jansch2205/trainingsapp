@@ -3,6 +3,8 @@ import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {Workout} from '../interface/workout';
 import {StorageService} from '../services/storage';
 import {MatButton} from '@angular/material/button';
+import {MatDialog} from '@angular/material/dialog';
+import {ConfirmationPopup} from '../confirmation-popup/confirmation-popup';
 
 @Component({
   selector: 'app-open-workout-plan',
@@ -20,7 +22,12 @@ export class OpenWorkoutPlan implements OnInit {
     private route: ActivatedRoute,
     private storage: StorageService,
     private cdr: ChangeDetectorRef,
-    private router: Router){}
+    private router: Router,
+    private dialog: MatDialog){}
+
+  get isStarted(): boolean {
+    return this.workout.workoutExercises.some(exercise => exercise.finishedSets !== 0);
+  }
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
@@ -32,6 +39,7 @@ export class OpenWorkoutPlan implements OnInit {
         if(!this.workout.finishedHistory) {
           this.workout.finishedHistory = [];
         }
+        this.promptToFinishIfAllExercisesAreComplete();
       }
       else {
         this.router.navigate(['/']);
@@ -39,14 +47,45 @@ export class OpenWorkoutPlan implements OnInit {
     }
   }
 
+  private promptToFinishIfAllExercisesAreComplete(): void {
+    const allExercisesComplete = this.workout.workoutExercises.length > 0 &&
+      this.workout.workoutExercises.every(exercise => exercise.finishedSets >= exercise.sets);
+
+    if (!allExercisesComplete) {
+      return;
+    }
+
+    const dialogRef = this.dialog.open(ConfirmationPopup, {
+      width: 'min(90vw, 420px)',
+      data: {
+        title: 'Alle Übungen sind abgeschlossen. Möchtest du das Training beenden?',
+        cancelLabel: 'Nein',
+        confirmLabel: 'Ja',
+        confirmColor: 'primary'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result: { confirmt: boolean } | false) => {
+      if (result && result.confirmt) {
+        this.resetWorkout(true);
+        this.router.navigate(['/']);
+      }
+    });
+  }
+
   resetWorkout(saveDate: boolean) {
+    if (!this.isStarted) {
+      return;
+    }
+
     const resetExercises = this.workout.workoutExercises.map(ex => ({
       ...ex,
       finishedSets: 0
     }));
     this.workout = {
       ...this.workout,
-      workoutExercises: resetExercises
+      workoutExercises: resetExercises,
+      started: false
     };
 
     if (saveDate) {

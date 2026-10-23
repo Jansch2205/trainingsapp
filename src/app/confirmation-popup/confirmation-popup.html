@@ -1,8 +1,8 @@
-<h2 mat-dialog-title>Möchtest du wirklich löschen?</h2>
+<h2 mat-dialog-title>{{ title }}</h2>
 
 <div>
   <mat-dialog-actions align="end">
-    <button mat-button (click)="onCancel()">Abbrechen</button>
-    <button mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
+    <button mat-button (click)="onCancel()">{{ cancelLabel }}</button>
+    <button mat-raised-button [color]="confirmColor" (click)="onConfirm()">{{ confirmLabel }}</button>
   </mat-dialog-actions>
 </div>

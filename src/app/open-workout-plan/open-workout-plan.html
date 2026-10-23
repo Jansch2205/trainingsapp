@@ -33,7 +33,7 @@
       }
     </section>
 
-    <button mat-flat-button class="button primary" routerLink="/" (click)="resetWorkout(true)">Training abschließen</button>
-    <button mat-flat-button class="button danger" (click)="resetWorkout(false)">Training abbrechen</button>
+    <button mat-flat-button class="button primary" routerLink="/" (click)="resetWorkout(true)" [disabled]="!isStarted">Training abschließen</button>
+    <button mat-flat-button class="button danger" (click)="resetWorkout(false)" [disabled]="!isStarted">Training abbrechen</button>
   </div>
 </div>

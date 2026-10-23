@@ -87,7 +87,7 @@
               mat-flat-button
               class="button primary"
               (click)="saveWorkout()"
-              [disabled]="workoutForm.invalid || exercise.length === 0"
+              [disabled]="workoutForm.invalid || !name.trim() || exercise.length === 0"
               routerLink="/">
         Trainingsplan speichern
       </button>

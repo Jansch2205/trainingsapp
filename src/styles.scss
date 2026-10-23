@@ -58,6 +58,17 @@ select {
   font: inherit;
 }
 
+button.button.mat-mdc-button-base:disabled,
+button.button.mat-mdc-button-base.mat-mdc-button-disabled {
+  background: rgba(148, 163, 184, 0.12) !important;
+  border-color: rgba(148, 163, 184, 0.18) !important;
+  box-shadow: none !important;
+  color: #94a3b8 !important;
+  cursor: not-allowed;
+  filter: saturate(0.45);
+  opacity: 0.65;
+}
+
 ::-webkit-scrollbar {
   display: none !important;
   width: 0 !important;
